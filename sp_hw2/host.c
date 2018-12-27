@@ -32,7 +32,7 @@ write to stdout as following format:
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-
+#include <time.h>
 
 int
 main(int argc, char **argv)
@@ -49,6 +49,7 @@ main(int argc, char **argv)
 // host[host_id]_B.FIFO: write message to player_B 
 // host[host_id]_C.FIFO: write message to player_C 
 // host[host_id]_D.FIFO: write message to player_D 
+	srand( time(NULL) );
 
 //host.FIFO
     char Name[100] = "host";
@@ -66,13 +67,11 @@ main(int argc, char **argv)
         strcat(Name, ".FIFO");
         mkfifo(Name, 0777);
         writefd[i] = open(Name, O_RDWR);
-        // printf("%d\n",writefd[i]);
     }
 //////// read 4 player id from bidding system    
     int     A, B, C, D;
     int     rankA=1, rankB=1, rankC=3, rankD=3;
     while(1) {
-        //printf("host:%d\n", host_id);
         scanf("%d %d %d %d", &A, &B, &C, &D);
 		//fprintf(stderr, "%d:[%d %d %d %d]\n",host_id,A,B,C,D);
 /////// -1 -1 -1 -1 as complete
@@ -129,7 +128,6 @@ main(int argc, char **argv)
 		char message[20];
 		char playerreturn[20];
 		for(int round=1;round<=10;round++){
-			//fprintf(stderr, "round:%d\n", round);
 			sprintf(message, "%d %d %d %d\n",moneyA,moneyB,moneyC,moneyD);
 			for(int i=0;i<4;i++){
 				write(writefd[i], message, strlen(message));

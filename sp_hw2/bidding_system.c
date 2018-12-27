@@ -180,8 +180,7 @@ main(int argc, char** argv)
 						sscanf(hostreturn,"%d %d\n%d %d\n%d %d\n%d %d\n",&thisid[0], &rank[0],&thisid[1],&rank[1],&thisid[2],&rank[2],&thisid[3],&rank[3]);
 						int ranktoscore[5] = {0, 3, 2, 1, 0};
 						for(int x=0;x<4;x++)
-							players[thisid[x]].score += ranktoscore[rank[x]];
-						
+							players[thisid[x]].score += ranktoscore[rank[x]];					
 						flag = 0;
 						break;
 					}
@@ -191,16 +190,13 @@ main(int argc, char** argv)
 				break;
 		}
 	}
-
 // send -1 -1 -1 -1
     char endmessage[] = "-1 -1 -1 -1";
     for(int i=1;i<=host_num;i++){
-        write(pipe_out[i][1], endmessage, strlen(endmessage)+1);
+        write(pipe_out[i][1], endmessage, strlen(endmessage));
 		close(pipe_out[i][1]);
 		close(pipe_in[i][0]);
     }
-	
-
 	for (int i=player_num;i>0;i--){
 		for(int j=1;j<i;j++){
 			if( players[j].score < players[j+1].score ){
@@ -216,11 +212,7 @@ main(int argc, char** argv)
 			}
 		}
 	}
-
-	
-
 	int nowid = 1;
-	//int nowrk = 1;
 	players[nowid].rk = 1;
 	nowid = 2;
 	while ( nowid <= player_num ){
@@ -231,51 +223,13 @@ main(int argc, char** argv)
 		}
 		nowid++;
 	}
-
 	for(int i=1;i<=player_num;i++){
 		printf("%d %d\n",players[i].number, players[i].rk);
 	}
-
-
-
-
-
 	for (int i=1;i<=host_num;i++){
 		//printf("i,pid=%d %d\n", i,pid[i]);
 		waitpid(pid[i], NULL, 0);
 	}
-   
-
-/*
-	for(int i=player_num;i>0;i--){
-		for(int j=1;j<player_num;j++){
-			if( score[j]>score[j+1] ){
-				int t = score[j];
-				score[j] = score[j+1];
-				score[j+1] = t;
-				t = index[j];
-				index[j] = index[j+1];
-				index[j+1] = t;
-			}
-		}
-	}
-	/*
-	for(int i=1;i<=player_num;i++){
-		printf("%d %d\n",index[i], score[i]);
-	}*/
-	/*int nowid = 1;
-	int ranknumber = 1;
-	while(nowid <= player_num){
-		for(int i=1;i<=player_num;i++){
-			//printf("i=%d",i);
-			if( index[i] == nowid )
-				printf("%d %d\n",nowid,ranknumber);
-		}
-		ranknumber++;
-		if( score[nowid] == score[nowid-1] ) ranknumber--;
-		nowid++;
-	}
-*/
 	exit(0);
 }
 

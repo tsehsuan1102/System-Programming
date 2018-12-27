@@ -21,3 +21,4 @@ player.o: player.c
 ### clean
 clean:
 	rm -rf bidding_system bidding_system.o host host.o player player.o
+
